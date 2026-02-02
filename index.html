@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,22 +12,23 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #ffe6e6; /* Soft pink background */
+            background-color: #ffe6e6;
             font-family: 'Poppins', sans-serif;
-            overflow: hidden; /* Prevent scrollbars when button moves */
+            overflow: hidden; 
         }
 
         .container {
             text-align: center;
             position: relative;
             z-index: 1;
+            width: 100%;
         }
 
         h1 {
             color: #d32f2f;
             font-size: 2.5rem;
             margin-bottom: 20px;
-            transition: all 0.3s ease;
+            padding: 0 10px;
         }
 
         .gif-container img {
@@ -40,7 +42,7 @@
             display: flex;
             gap: 20px;
             justify-content: center;
-            align-items: center; /* Keeps buttons aligned as one grows */
+            align-items: center;
             margin-top: 20px;
         }
 
@@ -50,15 +52,16 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.2s ease, background-color 0.2s; 
             font-weight: 600;
+            white-space: nowrap;
         }
 
         #yesBtn {
             background-color: #ff4d4d;
             color: white;
             box-shadow: 0 4px 10px rgba(255, 77, 77, 0.4);
-            transform-origin: center; /* Grows from center */
+            z-index: 10; 
         }
 
         #yesBtn:hover {
@@ -70,20 +73,22 @@
             background-color: #ffffff;
             color: #333;
             border: 2px solid #ccc;
-            position: relative; /* Allows absolute positioning later */
+            z-index: 9999;
+            position: relative; 
         }
 
-        /* Success Message styling */
         .success-message {
             display: none;
             flex-direction: column;
             align-items: center;
+            width: 100%;
+            z-index: 10001; /* Highest layer */
         }
         
-        /* Mobile adjustment */
         @media (max-width: 600px) {
             h1 { font-size: 1.8rem; }
             .gif-container img { width: 150px; }
+            .btn { padding: 10px 20px; font-size: 1rem; }
         }
     </style>
 </head>
@@ -91,7 +96,7 @@
 
     <div class="container" id="mainContainer">
         <div class="gif-container">
-            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmM2ZDJ4ZWh4cm03bXQ4Z255YXo4bXQ4Z255YXo4bXQ4Z255YXo4bSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute Bear">
+            <img src="https://media.tenor.com/fA1YkL6NnOMAAAAi/cute-bear.gif" alt="Cute Bear Asking">
         </div>
         
         <h1 id="question">Will you be my Valentine?</h1>
@@ -104,7 +109,7 @@
 
     <div class="success-message" id="successContainer">
         <div class="gif-container">
-            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW5sY2E5Y3owZ255YXo4bXQ4Z255YXo4bXQ4Z255YXo4bSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/T86i6yDyOYz7J6fou2/giphy.gif" alt="Celebration">
+            <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Celebration Kiss">
         </div>
         <h1>Yay! I knew you'd say yes! ❤️</h1>
     </div>
@@ -114,87 +119,65 @@
     <script>
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
-        const question = document.getElementById('question');
         const mainContainer = document.getElementById('mainContainer');
         const successContainer = document.getElementById('successContainer');
 
-        // Guilt trip texts for the No button
         const noTexts = [
-            "Are you sure?", 
-            "Really sure?", 
-            "Think again!", 
-            "Last chance!", 
-            "Surely not?", 
-            "You might regret this!", 
-            "Give it another thought!",
-            "Are you absolutely certain?", 
-            "This could be a mistake!", 
-            "Have a heart!",
-            "Don't be so cold!",
-            "Change of heart?",
-            "Wouldn't you reconsider?",
-            "Is that your final answer?",
-            "You're breaking my heart ;("
+            "Are you sure?", "Really sure?", "Think again!", "Last chance!", 
+            "Surely not?", "You might regret this!", "Give it another thought!",
+            "Are you absolutely certain?", "This could be a mistake!", "Have a heart!",
+            "Don't be so cold!", "Change of heart?", "Wouldn't you reconsider?",
+            "Is that your final answer?", "You're breaking my heart ;("
         ];
 
         let textIndex = 0;
         let currentScale = 1;
 
         function moveButton() {
-            // 1. Make Yes button bigger
             currentScale += 0.2;
             yesBtn.style.transform = `scale(${currentScale})`;
             
-            // 2. Change No button text (Cycle through array)
             noBtn.innerText = noTexts[textIndex % noTexts.length];
             textIndex++;
 
-            // 3. Move No button to random position
-            const maxWidth = window.innerWidth - noBtn.offsetWidth;
-            const maxHeight = window.innerHeight - noBtn.offsetHeight;
-            
-            // Ensure button doesn't go off screen
-            const randomX = Math.floor(Math.random() * (maxWidth - 20));
-            const randomY = Math.floor(Math.random() * (maxHeight - 20));
+            noBtn.style.position = 'fixed';
 
-            noBtn.style.position = 'absolute';
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
+            const btnRect = noBtn.getBoundingClientRect();
+            const btnWidth = btnRect.width;
+            const btnHeight = btnRect.height;
+
+            const winWidth = window.innerWidth;
+            const winHeight = window.innerHeight;
+
+            const maxLeft = Math.max(0, winWidth - btnWidth - 20);
+            const maxTop = Math.max(0, winHeight - btnHeight - 20);
+            
+            const randomLeft = Math.max(20, Math.floor(Math.random() * maxLeft));
+            const randomTop = Math.max(20, Math.floor(Math.random() * maxTop));
+
+            noBtn.style.left = randomLeft + 'px';
+            noBtn.style.top = randomTop + 'px';
         }
 
         function acceptLove() {
-            // Hide Question, Show Success
             mainContainer.style.display = 'none';
             successContainer.style.display = 'flex';
-            
-            // Trigger Confetti
             launchConfetti();
         }
 
-        // Professional grade confetti effect
         function launchConfetti() {
             var duration = 3 * 1000;
             var animationEnd = Date.now() + duration;
             var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
             var random = function(min, max) { return Math.random() * (max - min) + min; }
-
             var interval = setInterval(function() {
                 var timeLeft = animationEnd - Date.now();
-
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
-
+                if (timeLeft <= 0) return clearInterval(interval);
                 var particleCount = 50 * (timeLeft / duration);
-		confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.1, 0.3), y: Math.random() - 0.2 } }));
                 confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.7, 0.9), y: Math.random() - 0.2 } }));
             }, 250);
         }
     </script>
 </body>
 </html>
-
-
-
-
