@@ -1,0 +1,200 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Valentine ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffe6e6; /* Soft pink background */
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden; /* Prevent scrollbars when button moves */
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            color: #d32f2f;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .gif-container img {
+            width: 200px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center; /* Keeps buttons aligned as one grows */
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        #yesBtn {
+            background-color: #ff4d4d;
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 77, 77, 0.4);
+            transform-origin: center; /* Grows from center */
+        }
+
+        #yesBtn:hover {
+            background-color: #e60000;
+            transform: scale(1.05);
+        }
+
+        #noBtn {
+            background-color: #ffffff;
+            color: #333;
+            border: 2px solid #ccc;
+            position: relative; /* Allows absolute positioning later */
+        }
+
+        /* Success Message styling */
+        .success-message {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* Mobile adjustment */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .gif-container img { width: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainContainer">
+        <div class="gif-container">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmM2ZDJ4ZWh4cm03bXQ4Z255YXo4bXQ4Z255YXo4bXQ4Z255YXo4bSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute Bear">
+        </div>
+        
+        <h1 id="question">Will you be my Valentine?</h1>
+        
+        <div class="buttons">
+            <button class="btn" id="yesBtn" onclick="acceptLove()">Yes</button>
+            <button class="btn" id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton()">No</button>
+        </div>
+    </div>
+
+    <div class="success-message" id="successContainer">
+        <div class="gif-container">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW5sY2E5Y3owZ255YXo4bXQ4Z255YXo4bXQ4Z255YXo4bSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/T86i6yDyOYz7J6fou2/giphy.gif" alt="Celebration">
+        </div>
+        <h1>Yay! I knew you'd say yes! ❤️</h1>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const question = document.getElementById('question');
+        const mainContainer = document.getElementById('mainContainer');
+        const successContainer = document.getElementById('successContainer');
+
+        // Guilt trip texts for the No button
+        const noTexts = [
+            "Are you sure?", 
+            "Really sure?", 
+            "Think again!", 
+            "Last chance!", 
+            "Surely not?", 
+            "You might regret this!", 
+            "Give it another thought!",
+            "Are you absolutely certain?", 
+            "This could be a mistake!", 
+            "Have a heart!",
+            "Don't be so cold!",
+            "Change of heart?",
+            "Wouldn't you reconsider?",
+            "Is that your final answer?",
+            "You're breaking my heart ;("
+        ];
+
+        let textIndex = 0;
+        let currentScale = 1;
+
+        function moveButton() {
+            // 1. Make Yes button bigger
+            currentScale += 0.2;
+            yesBtn.style.transform = `scale(${currentScale})`;
+            
+            // 2. Change No button text (Cycle through array)
+            noBtn.innerText = noTexts[textIndex % noTexts.length];
+            textIndex++;
+
+            // 3. Move No button to random position
+            const maxWidth = window.innerWidth - noBtn.offsetWidth;
+            const maxHeight = window.innerHeight - noBtn.offsetHeight;
+            
+            // Ensure button doesn't go off screen
+            const randomX = Math.floor(Math.random() * (maxWidth - 20));
+            const randomY = Math.floor(Math.random() * (maxHeight - 20));
+
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        function acceptLove() {
+            // Hide Question, Show Success
+            mainContainer.style.display = 'none';
+            successContainer.style.display = 'flex';
+            
+            // Trigger Confetti
+            launchConfetti();
+        }
+
+        // Professional grade confetti effect
+        function launchConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            var random = function(min, max) { return Math.random() * (max - min) + min; }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+		confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
+
+
+
+
