@@ -32,7 +32,8 @@
         }
 
         .gif-container img {
-            width: 200px;
+            width: 200px; /* Adjust this if the bear is too big/small */
+            height: auto;
             border-radius: 15px;
             margin-bottom: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -82,7 +83,7 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            z-index: 10001; /* Highest layer */
+            z-index: 10001;
         }
         
         @media (max-width: 600px) {
@@ -96,7 +97,7 @@
 
     <div class="container" id="mainContainer">
         <div class="gif-container">
-            <img src="https://media.tenor.com/fA1YkL6NnOMAAAAi/cute-bear.gif" alt="Cute Bear Asking">
+            <img src="https://media.tenor.com/nZopt_Wk_REAAAAi/cute-bear-love.gif" alt="Cute Bear Asking">
         </div>
         
         <h1 id="question">Will baba be my(baby's) Valentine?</h1>
@@ -109,9 +110,9 @@
 
     <div class="success-message" id="successContainer">
         <div class="gif-container">
-            <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Celebration Kiss">
+            <img src="https://media.tenor.com/J7e9m1vY8QAAAAAi/milk-and-mocha-bear-love.gif" alt="Celebration Kiss">
         </div>
-        <h1>Yay! I knew you'd say yes! Love You My Cutto ❤️</h1>
+        <h1>Yay! I knew you'd say yes! ❤️</h1>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
